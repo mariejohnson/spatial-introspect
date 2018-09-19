@@ -1,5 +1,5 @@
 # spatial-introspect
-
+ 
 The ultimate goal of this project is to provide users of [dataone](https://www.dataone.org/) with a streamlined method of uploading spatial data. Currently users have to specify the coordinates of their data's bounding box corners. To do this accurately, users generally need to open up the dataset in a GIS package and manually copy over the corner coordinates of window. This is a time consuming process that probably makes people mutter oaths under their breath.
 
 So, in order to make life easier for data uploaders, we'd like to look at files that have been uploaded and do the following:
