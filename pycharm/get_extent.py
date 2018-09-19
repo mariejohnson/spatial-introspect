@@ -3,6 +3,8 @@ import rasterio
 from rasterio import RasterioIOError
 import os
 
+# practicing pushing via pycharm
+
 shp_fn = "/home/shares/scientist/sasap-biophys/HabitatMetrics/glaciers/Glaciers_RAP.shp"
 
 def get_extent_for_raster(file_path):
