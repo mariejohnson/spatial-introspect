@@ -1,4 +1,5 @@
 import fiona
+from fiona import errors
 import rasterio
 from rasterio import RasterioIOError
 import os
@@ -47,13 +48,24 @@ def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
         # do stuff to figure out the long_col_name
         pass
 '''
+#need to put fiona error
+# def get_extent_if_possible(file_path):
+#     try:
+#         extent = get_extent_for_vector(file_path)
+#     except RasterioIOError:
+#         extent = get_extent_for_raster(file_path)
+#
+#     return extent
+
+
 def get_extent_if_possible(file_path):
     try:
         extent = get_extent_for_vector(file_path)
-    except RasterioIOError:
+    except errors.FionaValueError:
         extent = get_extent_for_raster(file_path)
-        
+
     return extent
-    
+
+
 get_extent_if_possible(shp_fn)
 get_extent_if_possible(rast_ex)
