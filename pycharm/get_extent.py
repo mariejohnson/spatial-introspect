@@ -5,13 +5,14 @@ import os
 
 
 shp_fn = "/Users/datateam/repos/spatial-introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
+rast_ex = "/Users/datateam/repos/spatial-introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
 
-def get_shp_extents(shapefile):
+def get_extent_for_vector(shapefile):
     lats = []
     lons = []
     with fiona.open(shapefile, 'r') as src:
         for feat in src:
-            coords = feat['geometry']['coordinates'][0] # "I usually stop the debugger on this line, and see what's inside `feat` so get the values I'm after, whether they are geometry or property attributes"
+            coords = feat['geometry']['coordinates'][0] # stop the debugger on this line, and see what's inside `feat` to see the values I'm after
             [(lons.append(x), lats.append(y)) for x, y in coords]
 
     min_lat, max_lat = min(lats), max(lats)
@@ -20,20 +21,18 @@ def get_shp_extents(shapefile):
                                                                                         max_lat,
                                                                                         min_lon,
                                                                                         max_lon))
-get_shp_extents(shp_fn)
+#get_extent_for_vector(shp_fn)
+
+
+def get_extent_for_raster(raster):
+    ds = rasterio.open(raster, 'r')
+    print(ds.bounds)
+
+#get_extent_for_raster(rast_ex)
+
+
 
 '''
-def get_extent_for_raster(file_path):
-    ds = rasterio.open(file_path)
-    # do stuff with ds (data source) to get extent
-    # then return extent
-    
-def get_extent_for_vector(file_path):
-    ds = fiona.open(file_path)
-    # do stuff with ds (data source) to get extent
-    # maybe like this: https://gis.stackexchange.com/questions/90553/fiona-get-each-feature-extent-bounds
-    # then return extent
-    
 #Bonus Points!
 def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
     """
@@ -57,3 +56,4 @@ def get_extent_if_possible(file_path):
     return extent
     
 get_extent_if_possible(shp_fn)
+get_extent_if_possible(rast_ex)
