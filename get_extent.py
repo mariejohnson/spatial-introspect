@@ -14,6 +14,7 @@ from shapely.geometry import Point
 shp_fn = "/Users/datateam/repos/spatial-introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
 rast_ex = "/Users/datateam/repos/spatial-introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
 csv_ex = "/Users/datateam/repos/spatial-introspect/test_data/sample_d1_files/urn_uuid_5bb3f86b_ef85_447f_a026_6d8eb6306ea4/data/huayhuash.5.5-2010-11_Huayhuash_SitiosMuestreoPasto.csv.csv"
+NM_rast = "/Users/datateam/Desktop/test_data/soil_color_NM/NM_125cm.tif"
 
 def get_extent_for_vector(shapefile):
     lats = []
@@ -31,14 +32,38 @@ def get_extent_for_vector(shapefile):
                                                                                         max_lon))
 #get_extent_for_vector(shp_fn)
 
+# Need to convert when using files like NM_raster that are in meters
+'''rightm but that's probably what you're going to want. if you want to find it's bounds in geographic coordinates you need to 
+'reproject' the coordinates you have, or reproject the entire raster. 
+rasterio will reproject the raster, if you want to do that programmatically. 
+or you can use `pyproj` to convert the coordinates directly'''
+def get_extent_for_raster(raster):
+    with rasterio.open(raster, 'r') as ds:
+        print(ds.bounds)
+        print(ds.meta) #gets more info about the raster
+
+
+get_extent_for_raster(NM_rast)
+'''
+Notes on get_extent_for_raster()
+From Dave
+you want a context manager for that, so it closes automatically, that way when the function is done, the file gets closed, 
+not a big deal in this situation, but the convention keeps you from serious bugs later on.
+"with" is the context manager: when the code returns to the same indentation level as `with`, the file is automatically closed, +1 for python
+
+To potentially add later:
+when the code returns to the same indentation level as `with`, the file is automatically closed, +1 for python
+a lot of times, I'll get what I need and return to lower indentation level, so if it's a large raster, that memory is freed for other processes:
 
 def get_extent_for_raster(raster):
-    ds = rasterio.open(raster, 'r')
-    print(ds.bounds)
+    with rasterio.open(raster, 'r') as ds:
+        bounds = ds.bounds
+        meta = ds.meta
+		arr = ds.read()
+	
+	modified = arr.do_something_with_numpy_array()  # raster closes here
 
-#get_extent_for_raster(rast_ex)
-
-
+'''
 
 # Now I need to turn this into a function and make it into a bounding box
 df = pd.read_csv("/Users/datateam/repos/spatial-introspect/test_data/sample_d1_files/urn_uuid_5bb3f86b_ef85_447f_a026_6d8eb6306ea4/data/huayhuash.5.5-2010-11_Huayhuash_SitiosMuestreoPasto.csv.csv")
@@ -48,7 +73,8 @@ crs = {'init': 'epsg:4326'}
 gdf = GeoDataFrame(df, crs=crs, geometry=geometry)
 print(gdf)
 
-#stopped here
+# Thinking about how to change this into a bounding box but I think I need to change it from a geodataframe to a geoseries? Come back to this.
+# http://geopandas.org/reference.html#geoseries
 bounds = geopandas.GeoSeries.bounds()
 
 geoser = geopandas.GeoSeries(gdf)
