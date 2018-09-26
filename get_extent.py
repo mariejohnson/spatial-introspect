@@ -9,10 +9,14 @@ import geopandas
 from geopandas import GeoDataFrame
 import shapely
 from shapely.geometry import Point
+import sys
+import matplotlib
+import matplotlib.cbook
 
 
 shp_fn = "/Users/datateam/repos/spatial-introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
 rast_ex = "/Users/datateam/repos/spatial-introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
+CA_rast = "/Users/datateam/repos/spatial-introspect/NE1_50M_SR_W_tenth_CA.tif"
 csv_ex = "/Users/datateam/repos/spatial-introspect/test_data/sample_d1_files/urn_uuid_5bb3f86b_ef85_447f_a026_6d8eb6306ea4/data/huayhuash.5.5-2010-11_Huayhuash_SitiosMuestreoPasto.csv.csv"
 NM_rast = "/Users/datateam/Desktop/test_data/soil_color_NM/NM_125cm.tif"
 
@@ -42,17 +46,10 @@ def get_extent_for_raster(raster):
         print(ds.bounds)
         print(ds.meta) #gets more info about the raster
 
-get_extent_for_raster(rast_ex)
+get_extent_for_raster(CA_rast)
 #get_extent_for_raster(NM_rast)
 
-#Transform coordinates
-from pyproj import Proj, transform
 
-inProj = Proj(init='epsg:3857')
-outProj = Proj(init='epsg:4326')
-x1,y1 = -11705274.6374,4826473.6922
-x2,y2 = transform(inProj,outProj,x1,y1)
-print x2,y2
 '''
 Notes on get_extent_for_raster()
 From Dave
@@ -73,55 +70,21 @@ def get_extent_for_raster(raster):
 	modified = arr.do_something_with_numpy_array()  # raster closes here
 
 '''
+#documentation: http://geopandas.org/gallery/create_geopandas_from_pandas.html#sphx-glr-gallery-create-geopandas-from-pandas-py
 
-# Now I need to turn this into a function and make it into a bounding box
-df = pd.read_csv("/Users/datateam/repos/spatial-introspect/test_data/sample_d1_files/urn_uuid_5bb3f86b_ef85_447f_a026_6d8eb6306ea4/data/huayhuash.5.5-2010-11_Huayhuash_SitiosMuestreoPasto.csv.csv")
-geometry = [Point(xy) for xy in zip(df.Long, df.Lat)]
-df = df.drop(['Long', 'Lat'], axis=1)
-crs = {'init': 'epsg:4326'}
-gdf = GeoDataFrame(df, crs=crs, geometry=geometry)
-print(gdf)
-
-# Thinking about how to change this into a bounding box but I think I need to change it from a geodataframe to a geoseries? Come back to this.
-# http://geopandas.org/reference.html#geoseries
-bounds = geopandas.GeoSeries.bounds()
-
-geoser = geopandas.GeoSeries(gdf)
-
-gdf.bounds()
-
-
-# this is unsuccessful
-def get_extent_csv(file_path):
-    df = pd.read_csv(file_path)
-    for col in df: #hmm I think I need it to skip the first row, possibly by setting index, I think this is already default?
-        coords = df.iterrows()
-        print(coords)
+#This works but it doesn't seem to like the "with as"
+#Needs to be applied more broadly, find some way not to just use "Long" "Lat"
+#does with, as work here?
+def get_extent_csv(filepath):
+    df = pd.read_csv(filepath)
+    df['coordinates'] = list(zip(df.Long, df.Lat))
+    df['coordinates'] = df['coordinates'].apply(Point)
+    gdf = geopandas.GeoDataFrame(df, geometry='coordinates')
+    bnds = gdf.total_bounds
+    print(bnds)
 
 get_extent_csv(csv_ex)
 
-
-'''
-This: https://gis.stackexchange.com/questions/174159/convert-a-pandas-dataframe-to-a-geodataframe
-from geopandas import GeoDataFrame
-from shapely.geometry import Point
-
-geometry = [Point(xy) for xy in zip(df.Lon, df.Lat)]
-df = df.drop(['Lon', 'Lat'], axis=1)
-crs = {'init': 'epsg:4326'}
-gdf = GeoDataFrame(df, crs=crs, geometry=geometry)
-
-Maybe this: https://gis.stackexchange.com/questions/114066/handling-kml-csv-with-geopandas-drivererror-unsupported-driver-ucsv
-
-import pandas as pd
-import geopandas as gp
-from shapely.geometry import Point
-
-stations = pd.read_csv('../data/stations.csv')
-stations['geometry'] = stations.apply(lambda z: Point(z.X, z.Y), axis=1)
-stations = gp.GeoDataFrame(stations)
-
-Maybe this: https://gist.github.com/tchajed/93c347aeb2b24f034ea3
 
 '''
 
@@ -134,6 +97,7 @@ for row, col in df1.iterrows():
 
     df1['bark_density'][row] = dense
 
+'''
 '''
 #Bonus Points!
 def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
@@ -149,17 +113,10 @@ def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
         # do stuff to figure out the long_col_name
         pass
 '''
-#need to put fiona error
-# def get_extent_if_possible(file_path):
-#     try:
-#         extent = get_extent_for_vector(file_path)
-#     except RasterioIOError:
-#         extent = get_extent_for_raster(file_path)
-#
-#     return extent
 
+# How to make exception for csv?
 
-def get_extent_if_possible(file_path):
+def get_extent(file_path):
     try:
         extent = get_extent_for_vector(file_path)
     except errors.FionaValueError:
@@ -168,5 +125,5 @@ def get_extent_if_possible(file_path):
     return extent
 
 
-get_extent_if_possible(shp_fn)
-get_extent_if_possible(rast_ex)
+get_extent(shp_fn)
+get_extent(rast_ex)
