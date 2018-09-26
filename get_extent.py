@@ -30,7 +30,7 @@ def get_extent_for_vector(shapefile):
                                                                                         max_lat,
                                                                                         min_lon,
                                                                                         max_lon))
-#get_extent_for_vector(shp_fn)
+get_extent_for_vector(shp_fn)
 
 # Need to convert when using files like NM_raster that are in meters
 '''rightm but that's probably what you're going to want. if you want to find it's bounds in geographic coordinates you need to 
@@ -42,8 +42,17 @@ def get_extent_for_raster(raster):
         print(ds.bounds)
         print(ds.meta) #gets more info about the raster
 
+get_extent_for_raster(rast_ex)
+#get_extent_for_raster(NM_rast)
 
-get_extent_for_raster(NM_rast)
+#Transform coordinates
+from pyproj import Proj, transform
+
+inProj = Proj(init='epsg:3857')
+outProj = Proj(init='epsg:4326')
+x1,y1 = -11705274.6374,4826473.6922
+x2,y2 = transform(inProj,outProj,x1,y1)
+print x2,y2
 '''
 Notes on get_extent_for_raster()
 From Dave
