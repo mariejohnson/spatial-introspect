@@ -72,9 +72,7 @@ def get_extent_for_raster(raster):
 '''
 #documentation: http://geopandas.org/gallery/create_geopandas_from_pandas.html#sphx-glr-gallery-create-geopandas-from-pandas-py
 
-#This works but it doesn't seem to like the "with as"
 #Needs to be applied more broadly, find some way not to just use "Long" "Lat"
-#does with, as work here?
 def get_extent_csv(filepath):
     df = pd.read_csv(filepath)
     df['coordinates'] = list(zip(df.Long, df.Lat))
@@ -84,6 +82,39 @@ def get_extent_csv(filepath):
     print(bnds)
 
 get_extent_csv(csv_ex)
+
+
+class MissingLongitude(Exception):
+    pass
+
+class MissingLatitude(Exception):
+    pass
+
+def get_lon(csv_file):
+    df = pd.read_csv(csv_file)
+    cols = df.columns
+    if "lon" in cols:
+        lon_ix = cols.index('lon')
+        print(lon_ix)
+    elif "x" in cols:
+        lon_ix = cols.index('x')
+    else:
+        raise MissingLongitude('This csv appears to be missing a longitude field')
+
+get_lon(csv_ex)
+
+
+def get_lat(csv_file):
+    df = pd.read_csv(csv_file)
+    cols = df.columns
+    if "lat" in cols:
+        lon_ix = cols.index('lon')
+    elif "y" in cols:
+        lon_ix = cols.index('x')
+    else:
+        raise MissingLatitude('This csv appears to be missing a latitude field')
+
+
 
 
 '''
@@ -113,6 +144,7 @@ def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
         # do stuff to figure out the long_col_name
         pass
 '''
+
 
 # How to make exception for csv?
 
