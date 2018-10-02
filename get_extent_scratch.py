@@ -232,3 +232,137 @@ stations = gp.GeoDataFrame(stations)
 Maybe this: https://gist.github.com/tchajed/93c347aeb2b24f034ea3
 
 '''
+
+def generic_check_for_cols(df, col_string):
+    results = []
+    pat = re.compile(col_string, flags=re.IGNORECASE)
+    for col_name in df.columns:
+        if pat.match(col_name) is not None:
+            results.append(col_name)
+
+    return results
+
+def check_lat(df):
+    return generic_check_for_cols(df, "lat")
+
+lat_name = check_lat(sites_df)
+# How to I extract the column name so I don't have to label it below
+
+# # # Once you obtain Lat/Lon Column Names
+
+from shapely.geometry import Point
+
+csv_file = "some/file/that/is/not/really/here.csv"
+
+# determined above
+lat_name = "Latitude"
+lon_name = "Long"
+
+pnt_df = pd.read_csv(csv_file)
+# should probably check that the column name 'geometry' does not already exist
+# maybe doesn't matter because we're just trying to get extent. ...not saving these results
+# create geometry column
+pnt_df['geometry'] = pnt_df.apply(lambda r: Point(r[lon_name], r[lat_name]), axis=1)
+pnt_gdf = gpd.GeoDataFrame(pnt_df)
+
+# get the total bounds
+pnt_gdf.total_bounds
+
+# This is a not generic but good practice for me
+results = []
+pat = re.compile("lat", flags=re.IGNORECASE)
+# add more to lat pattern
+for col_name in sites_df.columns:
+    if pat.match(col_name) is not None:
+        results.append(col_name)
+
+print(results)
+
+# # # Check lat lon in column names functions
+def check_for_lat_cols(df):
+    results = []
+    pat = re.compile("lat", flags=re.IGNORECASE)
+    #needs to be broader? to exclude things like "plate"
+    for col_name in df.columns:
+        if pat.match(col_name) is not None:
+            results.append(col_name)
+
+    return results
+check_for_lat_cols(sites_df)
+
+regions_fp = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/urn%3Auuid%3Af6ab206b-312c-4caf-89c8-89eb9d031aac"
+# should actually be pd.read_csv
+regions = gpd.read_file(regions_fp).to_crs(epsg=3338)
+print(regions.columns)
+
+results = []
+pat = re.compile("REG", flags=re.IGNORECASE)
+for col_name in regions.columns:
+    if pat.match(col_name) is not None:
+        results.append(col_name)
+
+print(results)
+
+# example of some things you can do with re
+foo = pat.match("region")
+print(foo)
+foo_string = foo.string
+print(foo_string)
+# I think something is supposed to go in () or something, not really working here
+foo_groups = foo.groups()
+print(foo_groups)
+
+
+# # # Once you obtain Lat/Lon Column Names
+
+lat_name = check_lat(sites_df)
+lon_name = check_lon(sites_df)
+
+# pnt_df = pd.read_csv(csv_file)
+
+sites_df['geometry'] = sites_df.apply(lambda r: Point(r[lon_name], r[lat_name]), axis=1)
+pnt_gdf = gpd.GeoDataFrame(sites_df)
+
+# get the total bounds
+pnt_gdf.total_bounds
+
+
+def generic_check_for_cols(df, col_string):
+    results = []
+    pat = re.compile(col_string, flags=re.IGNORECASE)
+    for col_name in df.columns:
+        if pat.match(col_name) is not None:
+            results.append(col_name)
+
+    return results
+
+def check_lat(df):
+    return generic_check_for_cols(df, "lat")
+
+
+def check_lon(df):
+    return generic_check_for_cols(df, "lon")
+
+
+# # # Once you obtain Lat/Lon Column Names
+
+
+def the_actual_whole_function(csv_file_path):
+    csv_df = pd.read_csv(csv_file_path)
+
+    try:
+        lat_name = check_lat(csv_df)
+        lon_name = check_lon(csv_df)
+    except MyException:
+        raise MyException('Lat or lon column can not be guessed.')
+
+    csv_df['geometry'] = csv_df.apply(lambda r: Point(r[lon_name], r[lat_name]), axis=1)
+    pnt_gdf = gpd.GeoDataFrame(csv_df)
+
+    return pnt_gdf.total_bounds
+
+the_actual_whole_function(sampling_sites)
+
+
+class MyException(Exception):
+    pass
