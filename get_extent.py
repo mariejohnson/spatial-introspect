@@ -5,13 +5,14 @@ from rasterio import RasterioIOError
 import os
 import pandas as pd
 import numpy as np
-import geopandas
+import geopandas as gpd
 from geopandas import GeoDataFrame
 import shapely
 from shapely.geometry import Point
 import sys
 import matplotlib
 import matplotlib.cbook
+import re
 
 
 shp_fn = "/Users/datateam/repos/spatial-introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
@@ -46,30 +47,8 @@ def get_extent_for_raster(raster):
         print(ds.bounds)
         print(ds.meta) #gets more info about the raster
 
-get_extent_for_raster(CA_rast)
-#get_extent_for_raster(NM_rast)
 
 
-'''
-Notes on get_extent_for_raster()
-From Dave
-you want a context manager for that, so it closes automatically, that way when the function is done, the file gets closed, 
-not a big deal in this situation, but the convention keeps you from serious bugs later on.
-"with" is the context manager: when the code returns to the same indentation level as `with`, the file is automatically closed, +1 for python
-
-To potentially add later:
-when the code returns to the same indentation level as `with`, the file is automatically closed, +1 for python
-a lot of times, I'll get what I need and return to lower indentation level, so if it's a large raster, that memory is freed for other processes:
-
-def get_extent_for_raster(raster):
-    with rasterio.open(raster, 'r') as ds:
-        bounds = ds.bounds
-        meta = ds.meta
-		arr = ds.read()
-	
-	modified = arr.do_something_with_numpy_array()  # raster closes here
-
-'''
 #documentation: http://geopandas.org/gallery/create_geopandas_from_pandas.html#sphx-glr-gallery-create-geopandas-from-pandas-py
 
 #Needs to be applied more broadly, find some way not to just use "Long" "Lat"
@@ -77,7 +56,7 @@ def get_extent_csv(filepath):
     df = pd.read_csv(filepath)
     df['coordinates'] = list(zip(df.Long, df.Lat))
     df['coordinates'] = df['coordinates'].apply(Point)
-    gdf = geopandas.GeoDataFrame(df, geometry='coordinates')
+    gdf = gpd.GeoDataFrame(df, geometry='coordinates')
     bnds = gdf.total_bounds
     print(bnds)
 
@@ -117,18 +96,7 @@ def get_lat(csv_file):
 
 
 
-'''
 
-# Old pandas code
-for row, col in df1.iterrows():
-    if col['Circumference'] > 0.0:
-        dense = missbark(bk_mass=col['DryMassBark'], ba=col['bark_area'], circ=col['Circumference'], cnb=col['CircNoBark'], thick=col['avg_thickness'])
-    else:
-        dense = bark(bk_mass=col['DryMassBark'], ba=col['bark_area'], thick=col['avg_thickness'])
-
-    df1['bark_density'][row] = dense
-
-'''
 '''
 #Bonus Points!
 def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
@@ -157,5 +125,60 @@ def get_extent(file_path):
     return extent
 
 
-get_extent(shp_fn)
-get_extent(rast_ex)
+# # # CSV # # #
+
+# Check lat lon in column names functions
+
+# to do: Something will need to be done about
+
+sampling_sites = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.5.5"
+csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
+other = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.11.6"
+
+def the_actual_whole_function(csv):
+    csv_df = pd.read_csv(csv)
+    class MyException(Exception):
+        pass
+
+    def generic_check_for_cols(csv_df, col_string):
+        results = []
+        pat = re.compile(col_string, flags=re.IGNORECASE)
+        for col_name in csv_df.columns:
+            if pat.match(col_name) is not None:
+                results.append(col_name)
+        if len(results) != 1:
+            raise MyException
+        return results
+
+    def check_lat(csv_df):
+        return generic_check_for_cols(csv_df, "lat")
+
+    def check_lon(csv_df):
+        return generic_check_for_cols(csv_df, "lon")
+
+    try:
+        lat_name = check_lat(csv_df)
+    except MyException:
+        raise MyException('Latitude cannot be guessed.')
+    try:
+        lon_name = check_lon(csv_df)
+    except MyException:
+        raise MyException('Longitude cannot be guessed.')
+
+    csv_df['geometry'] = csv_df.apply(lambda r: Point(r[lon_name], r[lat_name]), axis=1)
+    pnt_gdf = gpd.GeoDataFrame(csv_df)
+
+    return pnt_gdf.total_bounds
+
+the_actual_whole_function(sampling_sites)
+the_actual_whole_function(csv_no_geo)
+# this has text that has lat in it
+the_actual_whole_function(other)
+# doesn't have lat or lon it but I'm not sure if it's calling the exception correctly or not
+
+# this is the old version, I think it works the same
+try:
+    lat_name = check_lat(csv_df)
+    lon_name = check_lon(csv_df)
+except MyException:
+    raise MyException('Latitude or longitude cannot be guessed.')
