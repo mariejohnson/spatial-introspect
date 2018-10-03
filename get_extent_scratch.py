@@ -366,3 +366,76 @@ the_actual_whole_function(sampling_sites)
 
 class MyException(Exception):
     pass
+
+
+def generic_check_for_cols(csv_df, col_string):
+    results = []
+    pat = re.compile(col_string, flags=re.IGNORECASE)
+    for col_name in csv_df.columns:
+        if pat.match(col_name) is not None:
+            results.append(col_name)
+    if len(results) != 1:
+        raise MyException
+    return results
+
+
+#documentation: http://geopandas.org/gallery/create_geopandas_from_pandas.html#sphx-glr-gallery-create-geopandas-from-pandas-py
+
+#Needs to be applied more broadly, find some way not to just use "Long" "Lat"
+def get_extent_csv(filepath):
+    df = pd.read_csv(filepath)
+    df['coordinates'] = list(zip(df.Long, df.Lat))
+    df['coordinates'] = df['coordinates'].apply(Point)
+    gdf = gpd.GeoDataFrame(df, geometry='coordinates')
+    bnds = gdf.total_bounds
+    print(bnds)
+
+get_extent_csv(csv_ex)
+
+
+class MissingLongitude(Exception):
+    pass
+
+class MissingLatitude(Exception):
+    pass
+
+def get_lon(csv_file):
+    df = pd.read_csv(csv_file)
+    cols = df.columns
+    if "lon" in cols:
+        lon_ix = cols.index('lon')
+        print(lon_ix)
+    elif "x" in cols:
+        lon_ix = cols.index('x')
+    else:
+        raise MissingLongitude('This csv appears to be missing a longitude field')
+
+get_lon(csv_ex)
+
+
+def get_lat(csv_file):
+    df = pd.read_csv(csv_file)
+    cols = df.columns
+    if "lat" in cols:
+        lon_ix = cols.index('lon')
+    elif "y" in cols:
+        lon_ix = cols.index('x')
+    else:
+        raise MissingLatitude('This csv appears to be missing a latitude field')
+
+
+'''
+#Bonus Points!
+def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
+    """
+    potential example with geopandas: https://gist.github.com/nygeog/2731427a74ed66ca0e420eaa7bcd0d2b
+
+    # outline
+
+    1. figure out column names if they're not provided 
+    2. convert to point geodataframe (geopandas)
+    """
+    if long_col_name is None:
+        # do stuff to figure out the long_col_name
+        pass
+'''
