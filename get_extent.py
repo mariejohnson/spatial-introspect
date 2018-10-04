@@ -16,6 +16,9 @@ import matplotlib.cbook
 import re
 from bounds import RasterBounds
 from fiona.transform import transform
+import bounds
+
+
 
 shp_fn = "/Users/datateam/repos/spatial-introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
 rast_ex = "/Users/datateam/repos/spatial-introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
@@ -27,8 +30,8 @@ csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
 
 shp_NM = "/Users/datateam/Desktop/snotel_201701_1169_shp/snotel_201701_1169.shp"
 
-# bounds = RasterBounds(raster=rast_ex)
-# print(bounds)
+bounds1 = RasterBounds(raster=rast_ex)
+print(bounds1)
 
 
 # for both vector and raster I need to reproject
@@ -47,7 +50,7 @@ def get_extent_for_vector(shapefile):
             # work on this later, work on transforming first
             coords = feat['geometry']['coordinates'][0] # stop the debugger on this line, and see what's inside `feat` to see the values I'm after
             [(lons.append(x), lats.append(y)) for x, y in coords]
-            transform('EPSG:4326', 'EPSG:4326', lons, lats) # this might need to be x, y
+            # transform('EPSG:4326', 'EPSG:4326', xs=lons, ys=lats) # this might need to be x, y
             print(lats, lons)
 
     # min_lat, max_lat = min(lats), max(lats)
