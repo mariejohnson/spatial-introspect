@@ -439,3 +439,64 @@ def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
         # do stuff to figure out the long_col_name
         pass
 '''
+
+#lon = x lat = y
+# xMin yMin, xMax, yMax
+shp_file = fiona.open(shp_fn, 'r')
+# this is all you need to do to get info about shape file, you can inspect it in the window, or probably print it
+shp_file.crs
+# {'init': 'epsg:3857'}
+
+shp_file.bounds
+# (9085047.3347, 11971301.884999998, 10104624.212199999, 12228183.776099999)
+
+_transform('EPSG:3857', 'EPSG:3576', [9085047.3347, 10104624.212199999], [11971301.884999998, 12228183.776099999])
+_transform({'proj': 'lcc', 'lat_0': 18.0, 'lat_1': 18.0, 'lon_0': -77.0}, {'proj': 'lcc', 'lat_0': 18.0, 'lat_1': 18.0, 'lon_0': -77.0}, [9085047.3347, 10104624.212199999], [11971301.884999998, 12228183.776099999])
+
+p = Proj(proj='merc',zone=10,ellps='WGS84') # use kwargs
+x,y = p(9085047.3347, 11971301.884999998)
+
+lons, lats = p(x, y, inverse=True)
+
+print(lons)
+
+lats = [90, 89, 23, 86, 94, 74]
+lons = [78, 73, 44, 65, 78, 74]
+[(lons.append(x), lats.append(y)) for x, y in coords]
+
+foo = lons.append()
+print(foo)
+# Practice using transform before putting it in a function
+abc = fiona.open(shp_fn, 'r')
+rec = next(abc)
+print(rec['geometry']['coordinates'])
+lats = []
+lons = []
+crds = rec['geometry']['coordinates']
+crds0 = rec['geometry']['coordinates'][0] # [0] gets rid of one of the brackets
+[(lons.append(x), lats.append(y)) for x, y in coords] # I think I need to iterate through the list to extract x, y
+print(crds0)
+
+
+
+coords = ['coordinates'][0] # stop the debugger on this line, and see what's inside `feat` to see the values I'm after
+[(lons.append(x), lats.append(y)) for x, y in coords]
+transform('EPSG:4326', 'EPSG:26953', lons, lats)
+
+
+from shapely.geometry import shape
+c = fiona.open("/Users/datateam/repos/spatial_introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp")
+# first record
+country = c.next()
+print(country)
+print(c)
+c.bounds
+c.next
+
+shapely.geometry.shape(c)
+
+
+'''rightm but that's probably what you're going to want. if you want to find it's bounds in geographic coordinates you need to 
+'reproject' the coordinates you have, or reproject the entire raster. 
+rasterio will reproject the raster, if you want to do that programmatically. 
+or you can use `pyproj` to convert the coordinates directly'''
