@@ -32,62 +32,61 @@ csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
 shp_NM = "/Users/datateam/Desktop/snotel_201701_1169_shp/snotel_201701_1169.shp"
 
 
-# need to turn this into a function
 # One problem will be if it is not a polygon (or maybe that is dealt with?) or maybe that doesn't matter
+# for point it should just show up as w,e = same coordinates and s,n = same coordinates
 def get_extent_vector(shapefile):
     with fiona.open(shapefile, 'r') as src:
-        bb = src.bounds
+        bb = src.bounds # this is fiona
         bbox = list(bb)
-        west = []
-        south = []
-        east = []
-        north = []
-        for i in bbox: #this doesn't exactly work
-            west.append(bbox[0])
-            south.append(bbox[1])
-            east.append(bbox[2])
-            north.append(bbox[3])
-
-            print(bbox[i]) # Need to turn this into w, s, e, n
-            # maybe print i? No. I'm thinking about this wrong
+        # Below is not technically needed but a good check
+        # print(bbox)
+        # print('West extent: {}\nSouth extent: {}\nEast extent: {}\nNorth extent: {}'.format(bbox[0],
+        #                                                                                     bbox[1],
+        #                                                                                     bbox[2],
+        #                                                                                     bbox[3]))
+        return bbox
 
 get_extent_vector(shp_fn)
+get_extent_vector(shp_NM)
 
-
-
-
-shp_file = fiona.open(shp_fn, 'r')
-fiona_bb = shp_file.bounds
-print(fiona_bb) # Need to turn this into w, s, e, n
-
-with fiona.open(shapefile, 'r') as src:
-    for bbox in src:
-        fiona_bb = shp_file.bounds
-
-NM_shp_file = fiona.open(shp_NM, 'r')
-fiona_bb = shp_file.bounds
-print(fiona_bb) # Need to turn this into w, s, e, n
 
 bbox = bounds.GeoBounds(west=9085047, south=11971301, east=10104624, north=12228183)
 geo_bounds = bbox.to_geographic(epsg=3857)
 print(geo_bounds)
 
 
-# Need to convert when using files like NM_raster that are in meters, this does that
 
-bounds1 = RasterBounds(raster=CA_rast)
-print(bounds1)
+def get_extent_raster(raster):
+    rbnds = RasterBounds(raster)
+    bounds = list((rbnds.west, rbnds.south, rbnds.east, rbnds.north))
+    print(bounds)
+    return bounds
 
-def get_extent_for_raster(raster):
-    with rasterio.open(raster, 'r') as ds:
-        #ds.features.bounds(geometry = polygon, north_up = True, transform = None)
-        print(ds.bounds) # need to transform and probably do return here instead of print
-        print(ds.meta) #gets more info about the raster
-
-get_extent_for_raster(NM_rast)
+get_extent_raster(CA_rast)
 
 
 
+# **************************************************************************************************** #
+
+# Currently working on
+# add more extensions, eventually add to larger function
+def check_format(name):
+    class MyException(Exception):
+        pass
+    if name.endswith(('.shp', '.csv', '.tif', )):
+        print('Good') # maybe return something?
+    else:
+        raise MyException('Incompatible file format')
+
+check_format(CA_rast)
+
+
+
+# **************************************************************************************************** #
+
+
+
+# # # Exceptions for rasters and vectors # # #
 
 def get_extent(file_path):
     try:
@@ -96,7 +95,6 @@ def get_extent(file_path):
         extent = get_extent_for_raster(file_path)
 
     return extent
-
 
 # # # CSV # # #
 
