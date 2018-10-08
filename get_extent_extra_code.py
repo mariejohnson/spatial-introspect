@@ -23,3 +23,36 @@ def get_extent_for_vector(shapefile):
                                                                                         min_lon,
                                                                                         max_lon))
 get_extent_for_vector(shp_fn)
+
+
+bounds1 = RasterBounds(raster=CA_rast)
+print(bounds1)
+
+
+
+# this also needs to be RasterBounds
+def get_extent_raster(raster):
+    with rasterio.open(raster, 'r') as ds:
+        #ds.features.bounds(geometry = polygon, north_up = True, transform = None)
+        print(ds.bounds) # need to transform and probably do return here instead of print
+        print(ds.meta) #gets more info about the raster
+
+get_extent_for_raster(NM_rast)
+
+
+
+def check_ext_2(file_name):
+    class MyException(Exception):
+        pass
+    pat = re.compile(r'lat')
+    for file in file_name:
+        if pat.findall(file) is True:
+            print(file)
+        else:
+            raise MyException("incorrect format")
+    #return results
+
+csv_string = "lat"
+
+check_ext_2(csv_string)
+
