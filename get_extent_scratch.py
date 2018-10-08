@@ -500,3 +500,130 @@ shapely.geometry.shape(c)
 'reproject' the coordinates you have, or reproject the entire raster. 
 rasterio will reproject the raster, if you want to do that programmatically. 
 or you can use `pyproj` to convert the coordinates directly'''
+
+shp_file = fiona.open(shp_fn, 'r')
+fiona_bb = shp_file.bounds
+print(fiona_bb) # Need to turn this into w, s, e, n
+
+with fiona.open(shapefile, 'r') as src:
+    for bbox in src:
+        fiona_bb = shp_file.bounds
+
+NM_shp_file = fiona.open(shp_NM, 'r')
+fiona_bb = shp_file.bounds
+print(fiona_bb) # Need to turn this into w, s, e, n
+
+# Likely all garbage
+
+def check_format(file_name):
+    pat = re.compile(r'\.shp|\.csv')
+    matches = pat.findall(file_name)  # was abc before
+    for x in matches:
+        if x is False:
+            print("bad")
+        else:
+            print("good")
+check_format(csv_ex)
+
+def check_format(file_name):
+    class MyException(Exception):
+        pass
+    pat = re.compile(r'\.shp|\.csv')
+    matches = pat.findall(file_name)
+    if matches is False:
+        print("Good") #just a test for the time being
+    else:
+        raise MyException("incompatible format ")
+check_format(CA_rast)
+
+#this works I think ... but maybe not
+abc = ".csv"
+pat = re.compile(r'\.shp|\.csv')
+matches = pat.findall(csv_ex) # was abc before
+for x in matches:
+    if matches is False:
+        print("bad")
+    else:
+        print("good")
+
+# I don't know that any of this works
+
+def generic_check_for_cols2(csv, col_string):
+    csv_df = pd.read_csv(csv)
+    class MyException(Exception):
+        pass
+    results = []
+    pat = re.compile(col_string, flags=re.IGNORECASE)
+    for col_name in csv_df.columns:
+        if pat.match(col_name) is not None:
+            results.append(col_name)
+    if len(results) != 1:
+        raise MyException
+    return results
+
+generic_check_for_cols2(csv_ex, "lat")
+
+def generic_check_for_cols3(df, col_string):
+    results = []
+    pat = re.compile(col_string, flags=re.IGNORECASE)
+    for col_name in df.columns:
+        if pat.match(col_name) is not None:
+            results.append(col_name)
+
+    return results
+
+
+
+# so this doesn't give me the correct error when I enter a non-raster or non-vector file, it
+def get_extent(file_path):
+    class MyException(Exception):
+        pass
+    ext = [".csv", ".shp"] # this doesn't really work
+    # if file_path != file_path.endswith(tuple(ext)): # works
+    #     raise MyException('Incorrect format')
+    # try:
+    #     file_path != file_path.endswith(tuple(ext))
+    #         raise MyException('Incorrect format')
+    # for i in ext:
+    #     if i.endswith(tuple(ext)) is False:
+    #         raise MyException("Incorrect format")
+    try:
+        extent = get_extent_vector(file_path)
+    except errors.FionaValueError:
+        extent = get_extent_raster(file_path)
+    # if file extention doesn't equal .shp or .tif (hmm, there's probably a better way) raise exception "Unable to get coordinates from this type of file format"
+    # maybe start off with if does not equal .shp or .tif raise exception
+    print(extent)
+
+    return extent
+
+get_extent(CA_rast)
+
+
+def check_extension(file_name):
+    class MyException(Exception):
+        pass
+    results = []
+    pat = re.compile(r'\.shp|\.csv')
+    for ext in pat:
+        if pat.match(ext) is False:
+            raise MyException('Incorrect format')
+    print()
+
+
+# this is a working function (maybe?)
+def check_extension(file_name):
+    class MyException(Exception):
+        pass
+    pat = re.compile(r'\.shp|\.csv')
+    matches = pat.findall(file_name)
+    print(matches) # ['.csv', '.csv']
+    for x in matches:
+        print(x) # .csv .csv
+        if x :
+            print(x)
+        # else:
+        #     raise MyException("incorrect format")
+
+check_extension(csv_ex)
+
