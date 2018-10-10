@@ -627,3 +627,19 @@ def check_extension(file_name):
 
 check_extension(csv_ex)
 
+# This doesn't actually work
+def get_extent(file_path):
+    class MyException(Exception):
+        pass
+    try:
+        if name.endswith(('.csv', '.txt',)):
+            extent = get_extent_csv(file_path)
+            return extent
+        elif:
+            try:
+                extent = get_extent_vector(file_path)
+            except errors.FionaValueError:
+                extent = get_extent_raster(file_path)
+            return extent
+        else:
+            raise MyException("Incompatible format")
