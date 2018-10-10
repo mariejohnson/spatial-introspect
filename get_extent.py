@@ -32,6 +32,7 @@ csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
 shp_NM = "/Users/datateam/Desktop/snotel_201701_1169_shp/snotel_201701_1169.shp"
 
 
+# THIS is a work in progress. Need to use bounds package to do this (but there isn't a function for vectors or something)
 # One problem will be if it is not a polygon (or maybe that is dealt with?) or maybe that doesn't matter
 # for point it should just show up as w,e = same coordinates and s,n = same coordinates
 def get_extent_vector(shapefile):
@@ -68,13 +69,13 @@ get_extent_raster(CA_rast)
 
 # **************************************************************************************************** #
 
-# Currently working on
-# add more extensions, eventually add to larger function
+# # Drop this
+# add more extensions, eventually add to larger function # drop this
 def check_format(name):
     class MyException(Exception):
         pass
     if name.endswith(('.shp', '.csv', '.tif', )):
-        print('Good') # maybe return something?
+        print('Good') # maybe return something? "good" is just the test for now.
     else:
         raise MyException('Incompatible file format')
 
@@ -84,17 +85,21 @@ check_format(CA_rast)
 
 # **************************************************************************************************** #
 
-
-
-# # # Exceptions for rasters and vectors # # #
+# includes exceptions
 
 def get_extent(file_path):
+    class MyException(Exception):
+        pass
     try:
-        extent = get_extent_for_vector(file_path)
+        extent = get_extent_csv(file_path)
+    except Exception as e: # no idea?
+        extent = get_extent_vector(file_path)
     except errors.FionaValueError:
-        extent = get_extent_for_raster(file_path)
-
+        extent = get_extent_raster(file_path)
+    if
+      # None of these things it raises an exception to tell me if it's not compatible
     return extent
+
 
 # # # CSV # # #
 
