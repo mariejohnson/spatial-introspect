@@ -56,3 +56,14 @@ csv_string = "lat"
 
 check_ext_2(csv_string)
 
+# example of elif
+def get_extent(file_path):
+    if name.endswith(('.csv', '.txt',)):
+        extent = get_extent_csv(file_path)
+    elif name.endswith('.shp'):
+        extent = get_extent_vector(file_path)
+    elif name.endswith('.tif'):
+        extent = get_extent_raster(file_path)
+    else:
+        extent = None
+    return extent
