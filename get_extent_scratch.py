@@ -643,3 +643,59 @@ def get_extent(file_path):
             return extent
         else:
             raise MyException("Incompatible format")
+
+crs_int = int(src.crs['init'].split(":")[1])
+
+prof = rst.profile['transform']
+
+# Good stuff
+# So I need to put this in vector bounds
+shp_epsg = shp.crs['init'].split(":")[1] # "[1] accesses the number, if it was [0] I would get "epsg"
+epsg_integer = int(shp_epsg)
+print(shp_epsg)
+
+shp_epsg = int(shp.crs['init'].split(":")[1]) # "[1] accesses the number, if it was [0] I would get "epsg"
+print(shp_epsg)
+
+
+v = VectorBounds(shp_fn)
+v.to_geographic()
+v.to_epsg(3857)
+
+def get_extent_vector(shapefile):
+    with fiona.open(shapefile, 'r') as src:
+        bb = src.bounds # this is fiona
+        bbox = list(bb)
+        # Below is not technically needed but a good check
+        # print(bbox)
+        # print('West extent: {}\nSouth extent: {}\nEast extent: {}\nNorth extent: {}'.format(bbox[0],
+        #                                                                                     bbox[1],
+        #                                                                                     bbox[2],
+        #                                                                                     bbox[3]))
+        return bbox
+
+
+# So I can use this if I can get the output from to go into the s,w,e,n arguments in GeoBounds
+bbox = bounds.GeoBounds(west=9085047, south=11971301, east=10104624, north=12228183)
+geo_bounds = bbox.to_geographic(epsg=3857)
+print(geo_bounds)
+
+def get_extent(file_path):
+    class MyException(Exception):
+        pass
+    try:
+        extent = get_extent_csv(file_path)
+    except Exception as e: # no idea?
+        extent = get_extent_vector(file_path)
+    except errors.FionaValueError:
+        extent = get_extent_raster(file_path)
+      # None of these things it raises an exception to tell me if it's not compatible
+    return extent
+
+shp = fiona.open(shp_fn, 'r')
+rst = rasterio.open(CA_rast, 'r')
+
+
+v = VectorBounds(shp_fn)
+v.to_geographic()
+v.to_epsg(3857)
