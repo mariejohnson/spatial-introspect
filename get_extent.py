@@ -11,95 +11,49 @@ from geopandas import GeoDataFrame
 import shapely
 from shapely.geometry import Point
 import sys
-import matplotlib
-import matplotlib.cbook
 import re
 from fiona._transform import _transform, _transform_geom
 from pyproj import Proj
-from bounds import RasterBounds
-from bounds import GeoBounds
+from vector_bounds import RasterBounds, GeoBounds, VectorBounds
 import bounds
 
 
-
-shp_fn = "/Users/datateam/repos/spatial_introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
-rast_ex = "/Users/datateam/repos/spatial_introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
-CA_rast = "/Users/datateam/repos/spatial_introspect/NE1_50M_SR_W_tenth_CA.tif"
-csv_ex = "/Users/datateam/repos/spatial_introspect/test_data/sample_d1_files/urn_uuid_5bb3f86b_ef85_447f_a026_6d8eb6306ea4/data/huayhuash.5.5-2010-11_Huayhuash_SitiosMuestreoPasto.csv.csv"
-NM_rast = "/Users/datateam/Desktop/test_data/soil_color_NM/NM_125cm.tif"
-sampling_sites = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.5.5"
-csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
-shp_NM = "/Users/datateam/Desktop/snotel_201701_1169_shp/snotel_201701_1169.shp"
-
-
-# THIS is a work in progress. Need to use bounds package to do this (but there isn't a function for vectors or something)
-# One problem will be if it is not a polygon (or maybe that is dealt with?) or maybe that doesn't matter
-# for point it should just show up as w,e = same coordinates and s,n = same coordinates
+# Issue: if it's not a polygon
 def get_extent_vector(shapefile):
-    with fiona.open(shapefile, 'r') as src:
-        bb = src.bounds # this is fiona
-        bbox = list(bb)
-        # Below is not technically needed but a good check
-        # print(bbox)
-        # print('West extent: {}\nSouth extent: {}\nEast extent: {}\nNorth extent: {}'.format(bbox[0],
-        #                                                                                     bbox[1],
-        #                                                                                     bbox[2],
-        #                                                                                     bbox[3]))
-        return bbox
+    vb = VectorBounds(shapefile)
+    bounds = list((vb.west, vb.south, vb.east, vb.north))
+    #print(bounds)
+    return bounds
 
 get_extent_vector(shp_fn)
-get_extent_vector(shp_NM)
-
-
-bbox = bounds.GeoBounds(west=9085047, south=11971301, east=10104624, north=12228183)
-geo_bounds = bbox.to_geographic(epsg=3857)
-print(geo_bounds)
-
 
 
 def get_extent_raster(raster):
     rbnds = RasterBounds(raster)
     bounds = list((rbnds.west, rbnds.south, rbnds.east, rbnds.north))
-    print(bounds)
+    #print(bounds)
     return bounds
 
 get_extent_raster(CA_rast)
 
 
-
 # **************************************************************************************************** #
 
-# # Drop this
-# add more extensions, eventually add to larger function # drop this
-def check_format(name):
-    class MyException(Exception):
-        pass
-    if name.endswith(('.shp', '.csv', '.tif', )):
-        print('Good') # maybe return something? "good" is just the test for now.
-    else:
-        raise MyException('Incompatible file format')
-
-check_format(CA_rast)
-
-
-
-# **************************************************************************************************** #
-
-# includes exceptions
 
 def get_extent(file_path):
-    class MyException(Exception):
-        pass
     try:
-        extent = get_extent_csv(file_path)
-    except Exception as e: # no idea?
         extent = get_extent_vector(file_path)
-    except errors.FionaValueError:
+    except errors.FionaValueError: # this will raise an exception if it's a CSV "unsupported driver"
         extent = get_extent_raster(file_path)
-    if
-      # None of these things it raises an exception to tell me if it's not compatible
     return extent
 
+
+
+get_extent(shp_fn)
+
+get_extent(CA_rast)
+
+get_extent(csv_ex)
 
 # # # CSV # # #
 
