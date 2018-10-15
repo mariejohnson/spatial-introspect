@@ -10,16 +10,18 @@ from shapely.geometry import Point
 from vector_bounds import RasterBounds, VectorBounds
 
 
-# Sample files
-shp_fn = "/Users/datateam/repos/spatial_introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
-rast_ex = "/Users/datateam/repos/spatial_introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
-CA_rast = "/Users/datateam/repos/spatial_introspect/NE1_50M_SR_W_tenth_CA.tif"
+# Local sample files
+shp_file = "/Users/datateam/repos/spatial_introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
+CA_rast = "/Users/datateam/repos/spatial_introspect/test_data/NE1_50M_SR_W_tenth_CA.tif"
 csv_ex = "/Users/datateam/repos/spatial_introspect/test_data/SitiosMuestreoPasto.csv"
-NM_rast = "/Users/datateam/Desktop/test_data/soil_color_NM/NM_125cm.tif"
-sampling_sites = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.5.5"
-csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
-shp_NM = "/Users/datateam/Desktop/snotel_201701_1169_shp/snotel_201701_1169.shp"
 test_csv = "/Users/datateam/Desktop/no_geo.csv"
+
+# On github
+herd_shp = "https://github.com/mariejohnson/spatial_introspect/raw/master/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
+# can't get the shapefile to download via github but it works locally
+CA_raster = "https://github.com/mariejohnson/spatial_introspect/raw/master/test_data/NE1_50M_SR_W_tenth_CA.tif"
+csv_no_geo = "https://raw.githubusercontent.com/mariejohnson/spatial_introspect/master/test_data/no_geo.csv"
+csv_geo = "https://raw.githubusercontent.com/mariejohnson/spatial_introspect/master/test_data/SitiosMuestreoPasto.csv"
 
 
 def get_extent_vector(shapefile):
@@ -27,19 +29,11 @@ def get_extent_vector(shapefile):
     bounds = list((vb.west, vb.south, vb.east, vb.north))
     return bounds
 
-
-# get_extent_vector(shp_NM)
-
-
 def get_extent_raster(raster):
     rbnds = RasterBounds(raster)
     bounds = list((rbnds.west, rbnds.south, rbnds.east, rbnds.north))
     # print(bounds)
     return bounds
-
-
-# get_extent_raster(CA_rast)
-
 
 # # # CSV # # #
 
@@ -77,11 +71,10 @@ def get_extent_csv(csv):
 
     return pnt_gdf.total_bounds.tolist()
 
-get_extent_csv(test_csv)
 
 # **************************************************************************************************** #
 
-
+# works for CSV's, vectors, rasters
 def get_extent(file_path):
     try:
         extent = get_extent_csv(file_path)
@@ -93,8 +86,7 @@ def get_extent(file_path):
     return extent
 
 
-get_extent(shp_fn) # works
 
-print(get_extent(CA_rast)) # works
 
-get_extent(test_csv) # works
+
+
