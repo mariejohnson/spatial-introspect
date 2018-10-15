@@ -88,8 +88,6 @@ class BBox(object):
 class GeoBounds(BBox):
     """Spatial bounding box
 
-    By default, represents a buffered bounding box around the conterminous U.S.
-
 
     """
 
@@ -142,7 +140,7 @@ class RasterBounds(BBox):
     def get_nwse_tuple(self):
         return self.north, self.west, self.south, self.east
 
-class VectorBounds(BBox): # I think I need to work the epsg_integer into this
+class VectorBounds(BBox):
     """ Spatial bounding box from vector extent.
 
     :param vector
