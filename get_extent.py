@@ -1,12 +1,10 @@
 import re
-
 import fiona
 import geopandas as gpd
 import pandas as pd
 from fiona import errors
 from pandas import errors
 from shapely.geometry import Point
-
 from vector_bounds import RasterBounds, VectorBounds
 
 
@@ -25,20 +23,54 @@ csv_geo = "https://raw.githubusercontent.com/mariejohnson/spatial_introspect/mas
 
 
 def get_extent_vector(shapefile):
+    """
+
+    Parameters
+    ----------
+    shapefile : str
+        Filepath to a shapefile
+
+    Returns
+    -------
+    Bounding box of vector in geographic coordinates
+
+    """
     vb = VectorBounds(shapefile)
     bounds = list((vb.west, vb.south, vb.east, vb.north))
     return bounds
 
 def get_extent_raster(raster):
+    """
+
+    Parameters
+    ----------
+    raster : str
+        Filepath to a raster
+
+    Returns
+    -------
+    Bounding box of raster in geographic coordinates
+
+    """
     rbnds = RasterBounds(raster)
     bounds = list((rbnds.west, rbnds.south, rbnds.east, rbnds.north))
-    # print(bounds)
+
     return bounds
 
-# # # CSV # # #
 
-# Extracts extent if lat and lon exist in column names
 def get_extent_csv(csv):
+    """
+
+    Parameters
+    ----------
+    csv : str
+        Filepath to a csv
+
+    Returns
+    -------
+    Bounding box of csv if lat and lon exist in column names
+
+    """
     csv_df = pd.read_csv(csv)
 
     class MyException(Exception):
@@ -72,10 +104,18 @@ def get_extent_csv(csv):
     return pnt_gdf.total_bounds.tolist()
 
 
-# **************************************************************************************************** #
-
-# works for CSV's, vectors, rasters
 def get_extent(file_path):
+    """
+
+    Parameters
+    ----------
+    vector, raster or csv : str
+        Filepath to vector, raster or csv
+
+    Returns
+    -------
+    Bounding box of vector, raster or csv
+    """
     try:
         extent = get_extent_csv(file_path)
     except pd.errors.ParserError:
