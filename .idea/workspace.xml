@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="77128948-eeb8-43d0-9239-a57003b4eccd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NE1_50M_SR_W_tenth_CA.tif" beforeDir="false" afterPath="$PROJECT_DIR$/test_data/NE1_50M_SR_W_tenth_CA.tif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_extent.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_extent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_extent_scratch.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_extent_scratch.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,32 +50,33 @@
     <session id="-1567345680">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.2" value="3" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="52" />
-          <entry key="py" value="8181" />
+          <entry key="py" value="8353" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="8233" />
+          <entry key="Python" value="8405" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="26" />
+          <entry key="py" value="28" />
           <entry key="xml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="26" />
+          <entry key="Python" value="28" />
           <entry key="XML" value="2" />
         </counts>
       </usages-collector>
@@ -83,14 +87,26 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/get_extent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="1245">
+              <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
-                <marker date="1539571005107" expanded="true" signature="962:1102" ph="..." />
-                <marker date="1539571005107" expanded="true" signature="1071:1102" ph="..." />
-                <marker date="1539571005107" expanded="true" signature="1134:1278" ph="..." />
-                <marker date="1539571005107" expanded="true" signature="1308:1309" ph="..." />
+                <marker date="1539619838104" expanded="true" signature="995:1135" ph="..." />
+                <marker date="1539619838104" expanded="true" signature="1104:1135" ph="..." />
+                <marker date="1539619838104" expanded="true" signature="1167:1311" ph="..." />
+                <marker date="1539619838104" expanded="true" signature="1341:1342" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/get_extent_scratch.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="708">
+              <caret line="710" column="17" selection-start-line="710" selection-start-column="17" selection-end-line="710" selection-end-column="17" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,11 +115,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vector_bounds.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
+            <state relative-caret-position="2385">
               <caret line="159" column="36" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
-                <element signature="e#3385#4370#0" />
               </folding>
             </state>
           </provider>
@@ -156,16 +171,16 @@
         <option value="$PROJECT_DIR$/review_notes/get_extent_notes.py" />
         <option value="$PROJECT_DIR$/sample_files.py" />
         <option value="$PROJECT_DIR$/get_extent_extra_code.py" />
-        <option value="$PROJECT_DIR$/get_extent_scratch.py" />
         <option value="$PROJECT_DIR$/vector_bounds.py" />
+        <option value="$PROJECT_DIR$/get_extent_scratch.py" />
         <option value="$PROJECT_DIR$/get_extent.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="80" />
-    <option name="height" value="22" />
+    <option name="width" value="1440" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -307,21 +322,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.047210302" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15236051" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32953367" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3299363" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25350317" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="5" weight="0.32953367" />
       <window_info anchor="bottom" id="Version Control" order="6" weight="0.3287841" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32953367" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.28535032" />
+      <window_info anchor="bottom" id="Python Console" order="9" visible="true" weight="0.355414" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -413,16 +427,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/regex_notes.py" />
     <entry file="file://$PROJECT_DIR$/bounds_test.py" />
-    <entry file="file://$PROJECT_DIR$/example_feat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="61" selection-start-line="31" selection-start-column="61" selection-end-line="31" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/example_feat.py" />
     <entry file="file://$PROJECT_DIR$/gdal_notes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -434,9 +439,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
           <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -464,23 +466,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/get_extent_extra_code.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="60" column="40" lean-forward="true" selection-start-line="60" selection-start-column="40" selection-end-line="60" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/get_extent_scratch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="676" lean-forward="true" selection-start-line="676" selection-end-line="676" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/review_notes/get_extent_notes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
@@ -498,17 +483,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vector_bounds.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="159" column="36" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-            <element signature="e#3385#4370#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sample_files.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -516,16 +490,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/get_extent_extra_code.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="60" column="40" lean-forward="true" selection-start-line="60" selection-start-column="40" selection-end-line="60" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/get_extent_scratch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="708">
+          <caret line="710" column="17" selection-start-line="710" selection-start-column="17" selection-end-line="710" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vector_bounds.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2385">
+          <caret line="159" column="36" selection-start-line="159" selection-start-column="36" selection-end-line="159" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/get_extent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="1245">
+          <caret line="83" lean-forward="true" selection-start-line="83" selection-end-line="83" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1539571005107" expanded="true" signature="962:1102" ph="..." />
-            <marker date="1539571005107" expanded="true" signature="1071:1102" ph="..." />
-            <marker date="1539571005107" expanded="true" signature="1134:1278" ph="..." />
-            <marker date="1539571005107" expanded="true" signature="1308:1309" ph="..." />
+            <marker date="1539619838104" expanded="true" signature="995:1135" ph="..." />
+            <marker date="1539619838104" expanded="true" signature="1104:1135" ph="..." />
+            <marker date="1539619838104" expanded="true" signature="1167:1311" ph="..." />
+            <marker date="1539619838104" expanded="true" signature="1341:1342" ph="..." />
           </folding>
         </state>
       </provider>

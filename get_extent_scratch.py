@@ -699,3 +699,13 @@ rst = rasterio.open(CA_rast, 'r')
 v = VectorBounds(shp_fn)
 v.to_geographic()
 v.to_epsg(3857)
+
+
+# Old exception
+# works but does not include extent for CSV
+def get_extent(file_path):
+    try:
+        extent = get_extent_vector(file_path)
+    except errors.FionaValueError: # this will raise an exception if it's a CSV "unsupported driver"
+        extent = get_extent_raster(file_path)
+    return extent

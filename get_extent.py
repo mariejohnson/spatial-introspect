@@ -9,6 +9,8 @@ from shapely.geometry import Point
 
 from vector_bounds import RasterBounds, VectorBounds
 
+
+# Sample files
 shp_fn = "/Users/datateam/repos/spatial_introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
 rast_ex = "/Users/datateam/repos/spatial_introspect/test_data/NE1_50M_SR/NE1_50M_SR.tif"
 CA_rast = "/Users/datateam/repos/spatial_introspect/NE1_50M_SR_W_tenth_CA.tif"
@@ -17,9 +19,9 @@ NM_rast = "/Users/datateam/Desktop/test_data/soil_color_NM/NM_125cm.tif"
 sampling_sites = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.5.5"
 csv_no_geo = "https://knb.ecoinformatics.org/knb/d1/mn/v2/object/huayhuash.10.2"
 shp_NM = "/Users/datateam/Desktop/snotel_201701_1169_shp/snotel_201701_1169.shp"
+test_csv = "/Users/datateam/Desktop/no_geo.csv"
 
 
-# Issue: if it's not a polygon
 def get_extent_vector(shapefile):
     vb = VectorBounds(shapefile)
     bounds = list((vb.west, vb.south, vb.east, vb.north))
@@ -75,16 +77,9 @@ def get_extent_csv(csv):
 
     return pnt_gdf.total_bounds.tolist()
 
+get_extent_csv(test_csv)
 
 # **************************************************************************************************** #
-
-# works but does not include extent for CSV
-# def get_extent(file_path):
-#     try:
-#         extent = get_extent_vector(file_path)
-#     except errors.FionaValueError: # this will raise an exception if it's a CSV "unsupported driver"
-#         extent = get_extent_raster(file_path)
-#     return extent
 
 
 def get_extent(file_path):
@@ -98,9 +93,8 @@ def get_extent(file_path):
     return extent
 
 
-# get_extent(shp_fn)
+get_extent(shp_fn) # works
 
-print(get_extent(csv_ex))
+print(get_extent(CA_rast)) # works
 
-# print(get_extent(CA_rast))  # does not work for raster
-
+get_extent(test_csv) # works
