@@ -31,7 +31,7 @@ print(bounds1)
 
 
 # this also needs to be RasterBounds
-def get_extent_raster(raster):
+def get_extent_for_raster(raster):
     with rasterio.open(raster, 'r') as ds:
         #ds.features.bounds(geometry = polygon, north_up = True, transform = None)
         print(ds.bounds) # need to transform and probably do return here instead of print
@@ -67,3 +67,18 @@ def get_extent(file_path):
     else:
         extent = None
     return extent
+
+
+# **************************************************************************************************** #
+
+# # Drop this
+# add more extensions, eventually add to larger function # drop this
+def check_format(name):
+    class MyException(Exception):
+        pass
+    if name.endswith(('.shp', '.csv', '.tif', )):
+        print('Good') # maybe return something? "good" is just the test for now.
+    else:
+        raise MyException('Incompatible file format')
+
+check_format(CA_rast)
