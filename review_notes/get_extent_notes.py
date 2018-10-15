@@ -110,3 +110,25 @@ def get_extent_for_csv(file_path, long_col_name=None, lat_col_name=None):
 'reproject' the coordinates you have, or reproject the entire raster. 
 rasterio will reproject the raster, if you want to do that programmatically. 
 or you can use `pyproj` to convert the coordinates directly'''
+
+def get_extent_for_raster(raster):
+    with rasterio.open(raster, 'r') as ds:
+        #ds.features.bounds(geometry = polygon, north_up = True, transform = None)
+        print(ds.bounds) # need to transform and probably do return here instead of print
+        print(ds.meta) #gets more info about the raster
+get_extent_for_raster(NM_rast)
+# Output
+# BoundingBox(left=-1233765.0836359565, bottom=883320.4870200155, right=-616761.8164309527, top=1688461.6052094982)
+# {'driver': 'GTiff', 'dtype': 'uint8', 'nodata': 255.0, 'width': 2499, 'height': 3261, 'count': 3, 'crs': CRS({'proj': 'aea', 'lat_1': 29.3, 'lat_2': 45.5, 'lat_0': 23, 'lon_0': -96, 'x_0': 0, 'y_0': 0, 'datum': 'NAD83', 'units': 'm', 'no_defs': True}), 'transform': Affine(246.900066908765, 0.0, -1233765.0836359565,
+#        0.0, -246.900066908765, 1688461.6052094982)}
+
+# Affine(246.900066908765, 0.0, -1233765.0836359565,
+#        0.0, -246.900066908765, 1688461.6052094982)}
+
+# Affine Transformation: https://support.esri.com/en/other-resources/gis-dictionary/term/3526be0c-e296-4c90-bb07-8a8cb121f693
+# A geometric transformation that scales, rotates, skews, and/or translates images or coordinates between any two Euclidean spaces.
+# It is commonly used in GIS to transform maps between coordinate systems. In an affine transformation, parallel lines remain parallel,
+# the midpoint of a line segment remains a midpoint, and all points on a straight line remain on a straight line.
+# # # Seems like it just means to transform maps between coordinate systems, I just don't understand how it works
+
+# More on spatial transformations: http://desktop.arcgis.com/en/arcmap/10.3/manage-data/editing-existing-features/about-spatial-adjustment-transformations.htm
