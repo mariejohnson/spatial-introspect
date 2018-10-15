@@ -5,7 +5,7 @@ import pandas as pd
 from fiona import errors
 from pandas import errors
 from shapely.geometry import Point
-from vector_bounds import RasterBounds, VectorBounds
+from bounds import RasterBounds, VectorBounds
 
 
 # Local sample files
@@ -124,7 +124,6 @@ def get_extent(file_path):
         except fiona.errors.FionaValueError:
             extent = get_extent_raster(file_path)
     return extent
-
 
 
 
