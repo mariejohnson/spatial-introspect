@@ -88,8 +88,6 @@ class BBox(object):
 class GeoBounds(BBox):
     """Spatial bounding box
 
-    By default, represents a buffered bounding box around the conterminous U.S.
-
 
     """
 
