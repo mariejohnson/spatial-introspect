@@ -8,22 +8,15 @@ from shapely.geometry import Point
 from bounds import RasterBounds, VectorBounds
 
 
-# Local sample files
-shp_file = "/Users/datateam/repos/spatial_introspect/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
-CA_rast = "/Users/datateam/repos/spatial_introspect/test_data/NE1_50M_SR_W_tenth_CA.tif"
-csv_ex = "/Users/datateam/repos/spatial_introspect/test_data/SitiosMuestreoPasto.csv"
-test_csv = "/Users/datateam/Desktop/no_geo.csv"
-
-# On github
-herd_shp = "https://github.com/mariejohnson/spatial_introspect/raw/master/test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
-# can't get the shapefile to download via github but it works locally
-CA_raster = "https://github.com/mariejohnson/spatial_introspect/raw/master/test_data/NE1_50M_SR_W_tenth_CA.tif"
-csv_no_geo = "https://raw.githubusercontent.com/mariejohnson/spatial_introspect/master/test_data/no_geo.csv"
+# Sample files
+herd_shp_file = "test_data/HerdSpatialDistribution/HerdSpatialDistribution.shp"
+CA_raster = "test_data/NE1_50M_SR_W_tenth_CA.tif"
 csv_geo = "https://raw.githubusercontent.com/mariejohnson/spatial_introspect/master/test_data/SitiosMuestreoPasto.csv"
+csv_no_geo = "https://raw.githubusercontent.com/mariejohnson/spatial_introspect/master/test_data/no_geo.csv"
 
 
 def get_extent_vector(shapefile):
-    """
+    """ Get geographic extent (WSEN) from shapefile
 
     Parameters
     ----------
@@ -40,7 +33,7 @@ def get_extent_vector(shapefile):
     return bounds
 
 def get_extent_raster(raster):
-    """
+    """ Get geographic extent (WSEN) from raster
 
     Parameters
     ----------
@@ -59,7 +52,7 @@ def get_extent_raster(raster):
 
 
 def get_extent_csv(csv):
-    """
+    """ Get geographic extent (WSEN) from CSV
 
     Parameters
     ----------
@@ -73,30 +66,30 @@ def get_extent_csv(csv):
     """
     csv_df = pd.read_csv(csv)
 
-    class MyException(Exception):
+    class ExtentFailedCSV(Exception):
         pass
 
-    def generic_check_for_cols(csv_df, col_string):
+    def check_cols(csv_df, col_string):
         results = []
         pat = re.compile(col_string, flags=re.IGNORECASE)
         for col_name in csv_df.columns:
             if pat.match(col_name) is not None:
                 results.append(col_name)
         if len(results) != 1:
-            raise MyException
+            raise ExtentFailedCSV
         return results
 
     def check_lat(csv_df):
-        return generic_check_for_cols(csv_df, "lat")
+        return check_cols(csv_df, "lat")
 
     def check_lon(csv_df):
-        return generic_check_for_cols(csv_df, "lon")
+        return check_cols(csv_df, "lon")
 
     try:
         lat_name = check_lat(csv_df)
         lon_name = check_lon(csv_df)
-    except MyException:
-        raise MyException('Latitude or longitude cannot be guessed.')
+    except ExtentFailedCSV:
+        raise ExtentFailedCSV('Latitude or longitude cannot be guessed.')
 
     csv_df['geometry'] = csv_df.apply(lambda r: Point(r[lon_name], r[lat_name]), axis=1)
     pnt_gdf = gpd.GeoDataFrame(csv_df)
@@ -105,7 +98,7 @@ def get_extent_csv(csv):
 
 
 def get_extent(file_path):
-    """
+    """ Get geographic extent (WSEN) from a shapefile, raster or CSV
 
     Parameters
     ----------
@@ -124,8 +117,5 @@ def get_extent(file_path):
         except fiona.errors.FionaValueError:
             extent = get_extent_raster(file_path)
     return extent
-
-
-
 
 
