@@ -9,4 +9,4 @@ So, in order to make life easier for data uploaders, we'd like to look at files 
 2. If it's not a spatial type but it is a csv, try to figure out if it represents point data.
 3. If none of the above raise an exception.
 
-The first step of developement will just be to write a function that takes a single file path as input and runs through the steps outlined above. We'll worry about integrating it with dataone later.
+The first step of development will just be to write a function that takes a single file path as input and runs through the steps outlined above. We'll worry about integrating it with dataone later.
