@@ -6,7 +6,7 @@ So, in order to make life easier for data uploaders, we'd like to look at files 
 
 1. Check if it's a spatial data type. If it is:
   1. See if it's vector or raster. Handle it with fiona if it's a vector and get it's bounding coordinates. Handle with rasterio if it's a raster and get it's bounding coordinates.
-2. If it's not a spatial type but it is a csv, try to figure out if it represents point data (details on this TBD).
-3. If none of the above, just return `False` or raise an exeption or something like that.
+2. If it's not a spatial type but it is a csv, try to figure out if it represents point data.
+3. If none of the above raise an exeption.
 
 The first step of developement will just be to write a function that takes a single file path as input and runs through the steps outlined above. We'll worry about integrating it with dataone later.
